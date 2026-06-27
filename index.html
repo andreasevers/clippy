@@ -82,7 +82,7 @@
   .tool.sep{width:0;border:none;border-left:1px solid var(--bevel-dark);height:20px;margin:0 3px;}
 
   .stage-wrap{background:var(--chrome);padding:8px;}
-  .stage{position:relative;aspect-ratio:4/3;background:#fff;overflow:hidden;}
+  .stage{position:relative;aspect-ratio:4/3;background:#fff;overflow:hidden;display:grid;grid-template:1fr/minmax(0,1fr);}
   .transition-badge{
     position:absolute;top:7px;right:7px;z-index:5;
     background:#000;color:#fff;font-size:10px;padding:3px 7px;border-radius:2px;
@@ -91,7 +91,7 @@
   .transition-badge.show{animation:badgeflash 1.1s ease forwards;}
   @keyframes badgeflash{0%{opacity:0;transform:translateY(-6px);}15%{opacity:1;transform:translateY(0);}75%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-4px);}}
 
-  .slide{position:absolute;inset:0;padding:15px;display:flex;flex-direction:column;font-family:var(--goofy);transform-origin:center;}
+  .slide{position:relative;grid-area:1/1;min-width:0;padding:15px;display:flex;flex-direction:column;font-family:var(--goofy);transform-origin:center;}
   .slide.anim-origami{animation:origami .7s ease;}
   .slide.anim-spin{animation:spin .7s ease;}
   .slide.anim-zoom{animation:zoomin .55s ease;}
@@ -203,6 +203,9 @@
     #clippy{width:92px;height:133px;}
     .speech{font-size:14px;}
     .menubar span{padding:1px 4px;}
+    .slide{padding:11px;}
+    .listcol{gap:4px;}
+    .s-head{margin-bottom:6px;}
   }
 
   @media (prefers-reduced-motion:reduce){
