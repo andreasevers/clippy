@@ -441,7 +441,7 @@
       var inner="";
       rows.forEach(function(r){ inner+='<div class="rfqrow"><span>☐ '+r+'</span><b>not filled in</b></div>'; });
       s.innerHTML='<div class="s-head">RFQs — Still Not Filled In ⚠️</div><div class="listcol">'+inner+'</div>'+
-        '<div class="rfqcount">Filled in: 0 / 27 &nbsp;(it is Saturday)</div>'+foot(4);
+        '<div class="rfqcount">Filled in: 0 / 197 &nbsp;(it is Saturday)</div>'+foot(4);
     } else if(T==="chart"){
       var hours=["08","10","12","14","16","18","20","22","00","02","04"];
       var vals=[6,4,8,5,7,6,10,14,22,98,90], max=100, bars="";
@@ -557,7 +557,7 @@
       choices:[{label:"None of your business, Clippit",to:"rfq"},{label:"A girl's gotta hustle",to:"rfq"}] },
 
     rfq:{ slide:{type:"rfq"},
-      text:"I know it's your day off. I respect that deeply.\n\nI just feel professionally obligated to mention your RFQs are still not filled in. All twenty-seven. On a Saturday. I'm not judging — I'm only displaying it in a very large font.",
+      text:"I know it's your day off. I respect that deeply.\n\nI just feel professionally obligated to mention your RFQs are still not filled in. All one hundred and ninety-seven. On a Saturday. I'm not judging — I'm only displaying it in a very large font.",
       choices:[{label:"It's the WEEKEND, Clippy",to:"rfqlater"},{label:"Don't remind me",to:"smalltalk"}] },
     rfqlater:{ text:"You're right. Weekend. Off-limits. Boundaries. I hear you.\n\n...I'll just leave the slide up though. For ambience.", choices:[{label:"Unbelievable",to:"smalltalk"}] },
 
