@@ -1,0 +1,608 @@
+<title>Clippy helps Lynn — A PowerPoint for Andreas</title>
+<meta name="description" content="Microsoft Clippy tries (and fails) to make a PowerPoint about Lynn's day — and lands on the one slide that matters: tonight.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<style>
+  :root{
+    --teal:#0a8a8a;
+    --chrome:#c3c7cb;
+    --bevel-light:#ffffff;
+    --bevel-dark:#3b3f43;
+    --navy1:#04007a;
+    --navy2:#1a8fe3;
+    --bubble:#ffffd9;
+    --bubble-edge:#d9c66a;
+    --ink:#1a1a1a;
+    --ui: "Tahoma","Geneva Pro","DejaVu Sans","Verdana",sans-serif;
+    --goofy: "Comic Sans MS","Chalkboard SE","Marker Felt","Comic Neue",cursive;
+    --hot:#ff19c3;
+    --cyan:#00e5ff;
+    --lime:#b6ff1a;
+    --orange:#ff8a00;
+    --purple:#8e2eff;
+  }
+
+  *{box-sizing:border-box;}
+
+  /* phone-first: fill the screen, no wasted desktop margins */
+  .desktop{
+    min-height:100dvh;
+    background:radial-gradient(circle at 30% 18%, #16a3a3, var(--teal) 62%);
+    font-family:var(--ui);
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:8px 7px calc(40px + env(safe-area-inset-bottom));
+    gap:9px;
+  }
+
+  .outset{
+    border:2px solid;
+    border-color:var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+    background:var(--chrome);
+  }
+  .inset{
+    border:2px solid;
+    border-color:var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);
+    background:#fff;
+  }
+
+  .app{
+    width:100%;
+    max-width:440px;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+  }
+
+  .window{padding:3px;box-shadow:2px 2px 0 rgba(0,0,0,.35);}
+  .titlebar{
+    background:linear-gradient(90deg,var(--navy1),var(--navy2));
+    color:#fff;font-weight:bold;font-size:13px;
+    padding:3px 4px 4px 6px;
+    display:flex;align-items:center;gap:6px;letter-spacing:.2px;
+  }
+  .titlebar .title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .winbtn{
+    width:18px;height:16px;display:grid;place-items:center;
+    font-size:11px;font-weight:bold;color:#000;font-family:var(--ui);line-height:1;
+    background:var(--chrome);border:2px solid;
+    border-color:var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  }
+  .menubar{display:flex;gap:1px;padding:3px 4px;font-size:12px;background:var(--chrome);}
+  .menubar span{padding:1px 5px;}
+  .menubar span u{text-decoration:underline;}
+  .toolbar{display:flex;gap:4px;align-items:center;padding:4px 5px;background:var(--chrome);flex-wrap:wrap;}
+  .tool{
+    width:26px;height:24px;display:grid;place-items:center;font-size:14px;
+    background:var(--chrome);border:2px solid;
+    border-color:var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+  }
+  .tool.sep{width:0;border:none;border-left:1px solid var(--bevel-dark);height:20px;margin:0 3px;}
+
+  .stage-wrap{background:var(--chrome);padding:8px;}
+  .stage{position:relative;aspect-ratio:4/3;background:#fff;overflow:hidden;}
+  .transition-badge{
+    position:absolute;top:7px;right:7px;z-index:5;
+    background:#000;color:#fff;font-size:10px;padding:3px 7px;border-radius:2px;
+    font-family:var(--ui);opacity:0;transform:translateY(-4px);
+  }
+  .transition-badge.show{animation:badgeflash 1.1s ease forwards;}
+  @keyframes badgeflash{0%{opacity:0;transform:translateY(-6px);}15%{opacity:1;transform:translateY(0);}75%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-4px);}}
+
+  .slide{position:absolute;inset:0;padding:15px;display:flex;flex-direction:column;font-family:var(--goofy);transform-origin:center;}
+  .slide.anim-origami{animation:origami .7s ease;}
+  .slide.anim-spin{animation:spin .7s ease;}
+  .slide.anim-zoom{animation:zoomin .55s ease;}
+  .slide.anim-checker{animation:checker .6s ease;}
+  @keyframes origami{from{transform:perspective(700px) rotateY(92deg);opacity:.2;}to{transform:none;opacity:1;}}
+  @keyframes spin{from{transform:rotate(-12deg) scale(.4);opacity:0;}to{transform:none;opacity:1;}}
+  @keyframes zoomin{from{transform:scale(.2);opacity:0;}to{transform:none;opacity:1;}}
+  @keyframes checker{from{opacity:0;filter:contrast(3) hue-rotate(90deg);}to{opacity:1;filter:none;}}
+
+  .slide-foot{margin-top:auto;font-size:9px;color:#777;font-family:var(--ui);display:flex;justify-content:space-between;padding-top:5px;gap:6px;}
+  .slide-foot span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  .wordart{
+    font-family:var(--goofy);font-weight:bold;text-transform:uppercase;line-height:.98;
+    transform:skewX(-9deg) rotate(-2deg);
+    background:linear-gradient(180deg,var(--hot),var(--orange) 40%,var(--lime) 70%,var(--cyan));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    -webkit-text-stroke:1.4px #2a0030;text-shadow:3px 3px 0 rgba(0,0,0,.25);
+    letter-spacing:.5px;text-wrap:balance;
+  }
+
+  .s-title{background:repeating-linear-gradient(45deg,#fff 0 16px,#fff7ff 16px 32px),var(--cyan);align-items:center;justify-content:center;text-align:center;gap:12px;}
+  .s-title .wordart{font-size:clamp(19px,7vw,30px);}
+  .s-title .sub{font-size:clamp(10px,3.4vw,14px);color:#0a0a8a;font-weight:bold;background:#ffff00;padding:3px 8px;border:2px dashed var(--hot);transform:rotate(1.5deg);}
+  .s-title .cup{font-size:clamp(32px,12vw,50px);transform:rotate(-12deg);filter:drop-shadow(2px 3px 0 rgba(0,0,0,.2));}
+  .s-title .forand{font-family:var(--ui);font-size:10px;color:#444;}
+
+  .s-head{font-size:clamp(14px,4.6vw,20px);color:var(--purple);-webkit-text-stroke:.6px #1a0030;margin-bottom:8px;text-wrap:balance;}
+  .cycle{flex:1;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:5px;align-content:center;}
+  .node{color:#fff;font-weight:bold;padding:6px 8px;font-size:clamp(9px,2.9vw,12px);text-align:center;max-width:120px;border:2px solid rgba(0,0,0,.35);box-shadow:2px 2px 0 rgba(0,0,0,.25);text-shadow:1px 1px 0 rgba(0,0,0,.3);}
+  .arrow{font-size:17px;color:#444;}
+
+  .listcol{flex:1;display:flex;flex-direction:column;gap:5px;justify-content:center;}
+  .rfqrow{display:flex;justify-content:space-between;gap:8px;align-items:center;background:#fff7d6;border:2px dashed var(--orange);padding:5px 8px;font-size:clamp(9px,3vw,12px);}
+  .rfqrow b{color:#b00000;white-space:nowrap;}
+  .rfqcount{text-align:center;font-weight:bold;color:#b00000;font-size:clamp(13px,4.2vw,18px);margin-top:7px;}
+
+  .daterow{display:flex;gap:7px;align-items:center;background:#ffe7f4;border:2px solid var(--hot);border-radius:7px;padding:6px 9px;font-size:clamp(9px,3vw,12px);color:#5a0033;}
+  .datecount{text-align:center;font-weight:bold;color:#b3007a;font-size:clamp(12px,3.8vw,16px);margin-top:7px;}
+
+  .jobrow{display:flex;gap:7px;align-items:center;background:#e7efff;border:2px solid var(--purple);border-radius:7px;padding:6px 9px;font-size:clamp(9px,3vw,12px);color:#1a1450;}
+  .jobcount{text-align:center;font-weight:bold;color:#5a2ec4;font-size:clamp(12px,3.8vw,16px);margin-top:7px;}
+
+  .chart{flex:1;display:flex;align-items:flex-end;gap:3px;padding:6px 2px 0;}
+  .bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;height:100%;}
+  .bar i{width:78%;background:linear-gradient(180deg,var(--hot),var(--purple));display:block;border:1px solid #2a0030;min-height:2px;transform-origin:bottom;animation:grow .5s ease;}
+  @keyframes grow{from{transform:scaleY(0);}to{transform:scaleY(1);}}
+  .bar small{font-family:var(--ui);font-size:8px;color:#555;}
+
+  .s-progress{align-items:center;justify-content:center;gap:13px;font-family:var(--ui);}
+  .s-progress .plabel{font-size:clamp(12px,3.8vw,15px);font-weight:bold;color:#04007a;text-align:center;text-wrap:balance;}
+  .pbar{width:80%;height:22px;padding:2px;}
+  .pbar .fill{height:100%;background:repeating-linear-gradient(90deg,#04007a 0 10px,#1a8fe3 10px 12px);width:0%;transition:width .15s linear;}
+  .pstatus{font-size:11px;color:#333;height:14px;text-align:center;}
+
+  .s-error{align-items:center;justify-content:center;gap:9px;text-align:center;background:#e8e8e8;font-family:var(--ui);}
+  .s-error .x{font-size:clamp(38px,14vw,60px);}
+  .s-error .etitle{font-weight:bold;font-size:clamp(13px,4vw,17px);color:#b00000;text-wrap:balance;}
+  .s-error .ecode{font-size:11px;color:#444;background:#fff;border:1px solid #999;padding:3px 8px;font-family:monospace;}
+  .s-error .eblame{font-size:12px;color:#222;}
+
+  .s-final{background:radial-gradient(circle at 25% 30%,#fff00055,transparent 40%),radial-gradient(circle at 75% 70%,#ff19c355,transparent 40%),var(--cyan);align-items:center;justify-content:center;text-align:center;gap:13px;}
+  .s-final .wordart{font-size:clamp(22px,8vw,38px);}
+  .s-final .fsub{font-family:var(--ui);font-weight:bold;color:#04007a;font-size:clamp(11px,3.4vw,14px);}
+
+  .s-love{background:radial-gradient(circle at 30% 25%,#fff,transparent 55%),linear-gradient(160deg,#ffd9ec,#ffb3da);align-items:center;justify-content:center;text-align:center;gap:12px;}
+  .s-love .wordart{font-size:clamp(22px,8vw,36px);background:linear-gradient(180deg,#ff3d8b,#b3007a);-webkit-text-stroke:1.2px #5a0033;}
+  .s-love .fsub{font-family:var(--ui);font-weight:bold;color:#8a0050;font-size:clamp(11px,3.4vw,14px);}
+
+  /* ---------- Clippy assistant ---------- */
+  .assistant{display:flex;align-items:flex-end;gap:7px;width:100%;max-width:440px;}
+  .bubble{
+    flex:1;background:var(--bubble);border:1px solid var(--bubble-edge);border-radius:9px;
+    padding:12px 13px;box-shadow:2px 3px 7px rgba(0,0,0,.3);position:relative;
+    min-height:118px;display:flex;flex-direction:column;gap:10px;
+  }
+  .bubble::after{content:"";position:absolute;right:-13px;bottom:24px;border:7px solid transparent;border-left-color:var(--bubble);filter:drop-shadow(1px 0 0 var(--bubble-edge));}
+  .speech{font-size:14.5px;line-height:1.46;color:#161616;white-space:pre-wrap;min-height:1.4em;}
+  .speech .cursor{display:inline-block;width:7px;height:1.05em;background:#333;vertical-align:-2px;margin-left:1px;animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .choices{display:flex;flex-direction:column;gap:7px;}
+  .choice{
+    font-family:var(--ui);font-size:13.5px;text-align:left;
+    padding:10px 12px;min-height:46px;
+    background:var(--chrome);border:2px solid;
+    border-color:var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);
+    cursor:pointer;color:#111;transition:background .08s;
+  }
+  .choice:hover{background:#d6dade;}
+  .choice:active{border-color:var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);padding:11px 11px 9px 13px;}
+  .choice:focus-visible{outline:2px solid #04007a;outline-offset:1px;}
+
+  .clip-holder{flex:0 0 auto;width:112px;display:flex;flex-direction:column;align-items:center;}
+  #clippy{width:108px;height:156px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .clip-label{font-size:10px;color:#063;background:#cfe;border:1px solid #6a9;padding:1px 6px;margin-top:2px;border-radius:3px;}
+
+  .taskbar{
+    position:fixed;left:0;right:0;bottom:0;height:32px;
+    padding-bottom:env(safe-area-inset-bottom);box-sizing:content-box;
+    background:var(--chrome);border-top:2px solid var(--bevel-light);
+    display:flex;align-items:center;gap:8px;padding-left:6px;padding-right:6px;z-index:20;
+  }
+  .start{display:flex;align-items:center;gap:6px;font-weight:bold;font-size:13px;padding:3px 9px 4px;background:var(--chrome);border:2px solid;border-color:var(--bevel-light) var(--bevel-dark) var(--bevel-dark) var(--bevel-light);height:24px;}
+  .task-open{flex:1;font-size:12px;padding:3px 8px;height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:2px solid;border-color:var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);}
+  .clock{margin-left:auto;font-size:12px;padding:3px 9px;height:24px;border:2px solid;border-color:var(--bevel-dark) var(--bevel-light) var(--bevel-light) var(--bevel-dark);font-variant-numeric:tabular-nums;}
+
+  @media (max-width:360px){
+    .clip-holder{width:96px;}
+    #clippy{width:92px;height:133px;}
+    .speech{font-size:14px;}
+    .menubar span{padding:1px 4px;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .slide{animation:none !important;}
+    .bar i{animation:none;}
+    .transition-badge.show{animation:none;opacity:0;}
+    .speech .cursor{animation:none;}
+  }
+</style>
+
+<div class="desktop">
+  <div class="app">
+    <div class="window outset">
+      <div class="titlebar">
+        <span class="pin">📎</span>
+        <span class="title">Lynn's Saturday — Microsoft PowerPoint</span>
+        <span class="winbtn">_</span>
+        <span class="winbtn">▢</span>
+        <span class="winbtn">✕</span>
+      </div>
+      <div class="menubar">
+        <span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span>
+        <span><u>I</u>nsert</span><span>F<u>o</u>rmat</span><span><u>T</u>ools</span><span><u>S</u>lide&nbsp;Show</span>
+      </div>
+      <div class="toolbar">
+        <span class="tool">🆕</span><span class="tool">📂</span><span class="tool">💾</span>
+        <span class="tool sep"></span>
+        <span class="tool">✂️</span><span class="tool">📋</span>
+        <span class="tool sep"></span>
+        <span class="tool">🅰️</span><span class="tool">🌈</span><span class="tool">✨</span>
+        <span class="tool sep"></span>
+        <span class="tool">▶️</span>
+      </div>
+      <div class="stage-wrap">
+        <div class="stage inset" id="stage">
+          <div class="transition-badge" id="tbadge"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="assistant">
+      <div class="bubble" id="bubble">
+        <div class="speech" id="speech"></div>
+        <div class="choices" id="choices"></div>
+      </div>
+      <div class="clip-holder">
+        <canvas id="clippy" width="192" height="280" aria-label="Clippy the paperclip"></canvas>
+        <span class="clip-label">Clippy</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="taskbar">
+    <span class="start"><span class="flag">🪟</span>Start</span>
+    <span class="task-open">📎 Lynn's Saturday — Microsoft...</span>
+    <span class="clock" id="clock">09:41</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+  /* ===================== Clippy canvas ===================== */
+  var cv = document.getElementById("clippy");
+  var ctx = cv.getContext("2d");
+  var W = cv.width, H = cv.height;
+  var t0=null, browRaise=0, browTarget=0;
+
+  function tnow(p){ if(t0===null) t0=p; return (p-t0)/1000; }
+
+  function metalStroke(){
+    var g=ctx.createLinearGradient(56,0,140,0);
+    g.addColorStop(0,"#f4f4f4"); g.addColorStop(.32,"#9aa0a6");
+    g.addColorStop(.52,"#e6eaee"); g.addColorStop(.78,"#6e747a"); g.addColorStop(1,"#c4c8cc");
+    return g;
+  }
+  function lidFill(cy,ry){
+    var g=ctx.createLinearGradient(0,cy-ry,0,cy+ry*0.2);
+    g.addColorStop(0,"#fcfcfc"); g.addColorStop(.5,"#bcc2c7"); g.addColorStop(1,"#7f868b");
+    return g;
+  }
+  function roundRectPath(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+  }
+  function ellipse(cx,cy,rx,ry){ ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); }
+
+  function drawEye(cx,cy,rx,ry,open){
+    var ryy=Math.max(ry*open,1.2);
+    ctx.save();
+    // white
+    ctx.fillStyle="#ffffff"; ellipse(cx,cy,rx,ryy); ctx.fill();
+    if(open>0.35){
+      ctx.save(); ellipse(cx,cy,rx,ryy); ctx.clip();
+      // big pupil, drifting + looking slightly down
+      var dx=Math.sin(performance.now()/950)*2.0;
+      ctx.fillStyle="#0b0b0b";
+      ctx.beginPath(); ctx.arc(cx+dx, cy+ry*0.18, rx*0.52, 0, Math.PI*2); ctx.fill();
+      // catchlight
+      ctx.fillStyle="#ffffff";
+      ctx.beginPath(); ctx.arc(cx+dx-rx*0.2, cy-ry*0.02, rx*0.15, 0, Math.PI*2); ctx.fill();
+      // silver hooded eyelid over the top ~40%
+      ctx.fillStyle=lidFill(cy,ryy);
+      ctx.beginPath(); ctx.ellipse(cx, cy-ryy*0.6, rx*1.04, ryy*0.66, 0, 0, Math.PI*2); ctx.fill();
+      // lid crease
+      ctx.strokeStyle="#6b7176"; ctx.lineWidth=1.4;
+      ctx.beginPath();
+      ctx.moveTo(cx-rx*0.92, cy-ryy*0.18);
+      ctx.quadraticCurveTo(cx, cy+ryy*0.04, cx+rx*0.92, cy-ryy*0.18);
+      ctx.stroke();
+      ctx.restore();
+    }
+    // outline last so it stays crisp
+    ctx.strokeStyle="#1a1a1a"; ctx.lineWidth=2.6; ellipse(cx,cy,rx,ryy); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawClippy(time){
+    ctx.clearRect(0,0,W,H);
+    var bob=Math.sin(time*1.6)*3;
+    var tilt=(-5 + Math.sin(time*0.85)*2) * Math.PI/180;
+    ctx.save();
+    ctx.translate(96, 152+bob);
+    ctx.rotate(tilt);
+    ctx.translate(-96, -152);
+
+    // ---- paperclip body (Gem clip: tall outer loop + shorter inner loop shifted up) ----
+    ctx.strokeStyle=metalStroke();
+    ctx.lineWidth=9; ctx.lineCap="round"; ctx.lineJoin="round";
+    roundRectPath(60,72,72,166,30); ctx.stroke();   // outer loop
+    roundRectPath(77,94,38,112,19); ctx.stroke();    // inner loop (shorter, shifted up)
+    ctx.beginPath(); ctx.moveTo(96,206); ctx.lineTo(96,228); ctx.stroke(); // wire tail
+
+    // ---- eyes (big, hooded, close-set, perched on the top loop) ----
+    var phase=time % 3.6, blink=1;
+    if(phase>1.25 && phase<1.38) blink=0.12;     // quick blink
+    if(phase>2.55 && phase<2.62) blink=0.12;
+    drawEye(84,90,12.5,15.5,blink);
+    drawEye(110,90,12.5,15.5,blink);
+
+    // ---- bold Groucho eyebrows ----
+    var r=browRaise*7;
+    ctx.strokeStyle="#241f1d"; ctx.lineWidth=6; ctx.lineCap="round";
+    ctx.beginPath();
+    ctx.moveTo(69,66-r);  ctx.quadraticCurveTo(83,55-r, 97,61-r);   // left brow
+    ctx.moveTo(99,61-r);  ctx.quadraticCurveTo(113,55-r, 127,66-r); // right brow
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function loop(p){
+    var time=tnow(p);
+    browRaise += (browTarget-browRaise)*0.12;
+    drawClippy(time);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  cv.addEventListener("click", function(){
+    browTarget=1; setTimeout(function(){browTarget=0;},700);
+    var pokes=[
+      "Ow. Don't tap the paperclip, Lynn.",
+      "Yes, I'm still alive. Unfortunately for us both.",
+      "Tapping won't help. Coffee might.",
+      "Big day today, hm? No reason. Forget I said that."
+    ];
+    if(current && !typing) flash(pokes[Math.floor((performance.now()%1000)/1000*pokes.length)]);
+  });
+
+  /* ===================== clock ===================== */
+  var mins=9*60+41;
+  function fmt(){ var h=Math.floor(mins/60)%24,m=mins%60; return (h<10?"0":"")+h+":"+(m<10?"0":"")+m; }
+  document.getElementById("clock").textContent=fmt();
+  setInterval(function(){ mins+=7; document.getElementById("clock").textContent=fmt(); },9000);
+
+  /* ===================== slides ===================== */
+  var stage=document.getElementById("stage");
+  var tbadge=document.getElementById("tbadge");
+  var transNames=["Origami","Glitter Wipe","Checkerboard","Fly In From Right","Dissolve","Cube","Paper Airplane ✈️","Blinds"];
+  var animClasses=["anim-origami","anim-spin","anim-zoom","anim-checker"];
+  var transIdx=0;
+
+  function el(tag,cls,html){ var e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; }
+
+  function renderSlide(slide){
+    Array.prototype.slice.call(stage.querySelectorAll(".slide")).forEach(function(n){n.remove();});
+    if(!slide) return;
+    var s=el("div","slide");
+    var anim=animClasses[transIdx%animClasses.length];
+    var tname=transNames[transIdx%transNames.length];
+    transIdx++;
+    if(!reduce){
+      s.classList.add(anim);
+      tbadge.textContent="Transition: "+tname;
+      tbadge.classList.remove("show"); void tbadge.offsetWidth; tbadge.classList.add("show");
+    }
+    buildSlide(s,slide);
+    stage.appendChild(s);
+  }
+  function foot(n){ return '<div class="slide-foot"><span>Lynn ▸ Saturday report for Andreas</span><span>Slide '+n+' / ∞</span></div>'; }
+
+  function buildSlide(s,slide){
+    var T=slide.type;
+    if(T==="title"){
+      s.className+=" s-title";
+      s.innerHTML='<div class="wordart">A Saturday in the Life of Lynn</div><div class="cup">☕</div>'+
+        '<div class="sub">Gym • Groceries • Containerpark • Powered by Coffee</div>'+
+        '<div class="forand">a loving Saturday report for Andreas</div>'+foot(1);
+    } else if(T==="cycle"){
+      var items=["Coffee","Gym 💪","Groceries 🛒","Containerpark ♻️","More coffee"];
+      var cols=["#ff19c3","#8e2eff","#00a6c4","#ff8a00","#1aaf3a"];
+      var inner="";
+      items.forEach(function(it,i){
+        inner+='<div class="node" style="background:'+cols[i%cols.length]+'">'+it+'</div>';
+        inner+=(i<items.length-1)?'<span class="arrow">➜</span>':'<span class="arrow">↺</span>';
+      });
+      s.innerHTML='<div class="s-head">My Saturday Morning — a SmartArt Cycle 🔄</div><div class="cycle">'+inner+'</div>'+foot(2);
+    } else if(T==="job"){
+      var jrows=["🕵️  Theory 1: secret barista ☕","🎭  Theory 2: underground origami champion",
+                 "🏃  Theory 3: she simply cannot sit still","✅  Confirmed: it pays, it's hers, it's Saturday"];
+      var jinner="";
+      jrows.forEach(function(r){ jinner+='<div class="jobrow">'+r+'</div>'; });
+      s.innerHTML='<div class="s-head">Afternoon — The Mysterious Weekend Job 🕵️</div>'+
+        '<div class="listcol">'+jinner+'</div>'+
+        '<div class="jobcount">Rest scheduled: never</div>'+foot(3);
+    } else if(T==="rfq"){
+      var rows=["RFQ #4471 — Northwind","RFQ #4472 — Globex","RFQ #4473 — Initech","RFQ #4488 — Stark & Co.","RFQ #4490 — Wayne Group"];
+      var inner="";
+      rows.forEach(function(r){ inner+='<div class="rfqrow"><span>☐ '+r+'</span><b>not filled in</b></div>'; });
+      s.innerHTML='<div class="s-head">RFQs — Still Not Filled In ⚠️</div><div class="listcol">'+inner+'</div>'+
+        '<div class="rfqcount">Filled in: 0 / 27 &nbsp;(it is Saturday)</div>'+foot(4);
+    } else if(T==="chart"){
+      var hours=["08","10","12","14","16","18","20","22","00","02","04"];
+      var vals=[6,4,8,5,7,6,10,14,22,98,90], max=100, bars="";
+      hours.forEach(function(h,i){ bars+='<div class="bar"><i style="height:'+Math.round(vals[i]/max*100)+'%"></i><small>'+h+'</small></div>'; });
+      s.innerHTML='<div class="s-head">Willingness to Chat, by Hour 📊</div>'+
+        '<div style="font-family:var(--ui);font-size:10px;color:#666;margin:-4px 0 2px">(small talk = no, 3 AM = absolutely)</div>'+
+        '<div class="chart">'+bars+'</div>'+foot(5);
+    } else if(T==="progress"){
+      s.className+=" s-progress";
+      s.innerHTML='<div class="plabel">'+(slide.label||"Working...")+'</div>'+
+        '<div class="pbar inset"><div class="fill" id="pfill"></div></div>'+
+        '<div class="pstatus" id="pstatus">&nbsp;</div>';
+    } else if(T==="error"){
+      s.className+=" s-error";
+      var codes=["0xLYNN0001","0xCOFFEE","0xC0FFEE","0xORIGAMI","0xRFQ_EMPTY","0xSMARTART_LEFT"];
+      s.innerHTML='<div class="x">❌</div><div class="etitle">'+(slide.title||"Something went wrong")+'</div>'+
+        '<div class="ecode">Error code: '+codes[transIdx%codes.length]+'</div>'+
+        '<div class="eblame">Responsible party: <b>Lynn</b></div>';
+    } else if(T==="final"){
+      s.className+=" s-final";
+      s.innerHTML='<div class="wordart">0 Slides Completed</div><div class="fsub">🎉 a day well spent 🎉</div>'+
+        '<div class="cup" style="font-size:38px">📎</div>';
+    } else if(T==="date"){
+      var rows=["🕗  Tonight (terrifying & exciting)","👗  Come as you are — coffee stains welcome",
+                "🚫  Banned topic: the weather","💬  Allowed: rambling until 3 AM","📎  RFQs: leave them. Just for tonight."];
+      var inner="";
+      rows.forEach(function(r){ inner+='<div class="daterow">'+r+'</div>'; });
+      s.innerHTML='<div class="s-head" style="color:#b3007a">Tonight — First Date 💘</div>'+
+        '<div class="listcol">'+inner+'</div>'+
+        '<div class="datecount">Slides that actually matter: 1</div>'+foot("♥");
+    } else if(T==="love"){
+      s.className+=" s-love";
+      s.innerHTML='<div class="wordart">See You Tonight</div><div class="fsub">no slides required ❤️</div>'+
+        '<div class="cup" style="font-size:36px">📎❤️</div>';
+    }
+  }
+
+  function runProgress(slide,done){
+    renderSlide(slide);
+    var fill=document.getElementById("pfill"), status=document.getElementById("pstatus");
+    var lines=slide.status||["Applying glitter...","Bolding Comic Sans...","Folding origami...","Loading coffee..."];
+    if(reduce){ if(fill)fill.style.width="100%"; setTimeout(done,500); return; }
+    var p=0,li=0; if(status)status.textContent=lines[0];
+    var iv=setInterval(function(){
+      p+=4+Math.random()*9;
+      var capped=Math.min(p,slide.dieAt||99);
+      if(fill)fill.style.width=capped+"%";
+      if(status&&Math.random()<0.35){ li=(li+1)%lines.length; status.textContent=lines[li]; }
+      if(p>=(slide.dieAt||99)){ clearInterval(iv); if(status)status.textContent="…"; setTimeout(done,650); }
+    },160);
+  }
+
+  /* ===================== dialogue engine ===================== */
+  var speech=document.getElementById("speech");
+  var choicesEl=document.getElementById("choices");
+  var bubble=document.getElementById("bubble");
+  var typing=false,typeTimer=null,fullText="",current=null;
+
+  function typeOut(text,cb){
+    typing=true; fullText=text; choicesEl.innerHTML=""; speech.textContent="";
+    if(reduce){ speech.textContent=text; typing=false; if(cb)cb(); return; }
+    var i=0, cur=el("span","cursor");
+    function step(){
+      if(i<=text.length){
+        speech.textContent=text.slice(0,i); speech.appendChild(cur); i++;
+        var ch=text[i-1], d=22;
+        if(ch==="."||ch==="!"||ch==="?") d=230; else if(ch===","||ch==="\n") d=115;
+        typeTimer=setTimeout(step,d);
+      } else { speech.textContent=text; typing=false; if(cb)cb(); }
+    }
+    step();
+  }
+  function finishTyping(){ if(!typing)return; clearTimeout(typeTimer); speech.textContent=fullText; typing=false; showChoices(current); }
+  bubble.addEventListener("click",function(e){ if(e.target.classList.contains("choice"))return; if(typing)finishTyping(); });
+
+  function showChoices(node){
+    choicesEl.innerHTML="";
+    (node.choices||[]).forEach(function(c){
+      var b=el("button","choice",c.label); b.type="button";
+      b.addEventListener("click",function(){ go(c.to); });
+      choicesEl.appendChild(b);
+    });
+  }
+  function flash(msg){ if(typing)return; speech.textContent=msg; setTimeout(function(){ if(current)speech.textContent=current.text; },1700); }
+
+  function go(id){
+    var node=NODES[id]; if(!node)return; current=node;
+    browTarget=1; setTimeout(function(){browTarget=0;},600);
+    if(node.run==="progress"){ choicesEl.innerHTML=""; speech.textContent=node.text||"One moment..."; runProgress(node.slide,function(){ go(node.to); }); return; }
+    if(node.slide) renderSlide(node.slide);
+    typeOut(node.text,function(){ showChoices(node); });
+  }
+
+  /* ===================== script ===================== */
+  var NODES={
+    start:{ text:"Hi Lynn! 📎\n\nIt looks like you're trying to make a professional PowerPoint to document your Saturday for Andreas.\n\nA whole presentation about your day off. Touchingly ambitious. Shall I help?",
+      choices:[{label:"Yes please",to:"title"},{label:"No, go away",to:"nogo"},{label:"Coffee first ☕",to:"coffee"}] },
+    nogo:{ text:"I never finished that button. Like most things at Microsoft.\n\nWe'll just keep going! 🎉", choices:[{label:"...fine",to:"title"}] },
+    coffee:{ text:"Your how-many-th today? Five? Six?\n\nDon't answer, I don't want to know. I run on caffeine and regret too. We're going to get along.", choices:[{label:"Let's go",to:"title"}] },
+
+    title:{ slide:{type:"title"},
+      text:"Every powerful presentation starts with a powerful title.\n\nI suggest: “A Day in the Life of Lynn.” In Comic Sans. Very corporate. Very C-level.",
+      choices:[{label:"Gorgeous",to:"agenda"},{label:"A little less Comic Sans?",to:"lesscomic"},{label:"Can this be more professional?",to:"pro"}] },
+    lesscomic:{ text:"Understood. I'll set it to Comic Sans Bold.\n\nThat's as subtle as I get without losing my dignity. Which I lost back in 2003 anyway.", choices:[{label:"Sigh",to:"agenda"}] },
+    pro:{ text:"More professional? In PowerPoint? Lynn, that's a contradiction in terms.\n\nBut I'll add a glitter transition and a WordArt rainbow. Looks expensive. Clients love that.", choices:[{label:"Go for it",to:"agenda"}] },
+
+    agenda:{ slide:{type:"cycle"},
+      text:"Every Saturday needs an agenda. I've turned your morning into a SmartArt cycle: gym, groceries, the containerpark.\n\nDynamic. Strategic. Mostly cardio and recycling. Perfect.",
+      choices:[{label:"Looks right",to:"weekendjob"},{label:"Eerily accurate",to:"weekendjob"}] },
+
+    weekendjob:{ slide:{type:"job"},
+      text:"Hold on. The afternoon says you've got a... second job? On a Saturday? After the gym AND the containerpark?\n\nLynn. When do you rest. I've drafted some theories.",
+      choices:[{label:"None of your business, Clippit",to:"rfq"},{label:"A girl's gotta hustle",to:"rfq"}] },
+
+    rfq:{ slide:{type:"rfq"},
+      text:"I know it's your day off. I respect that deeply.\n\nI just feel professionally obligated to mention your RFQs are still not filled in. All twenty-seven. On a Saturday. I'm not judging — I'm only displaying it in a very large font.",
+      choices:[{label:"It's the WEEKEND, Clippy",to:"rfqlater"},{label:"Don't remind me",to:"smalltalk"}] },
+    rfqlater:{ text:"You're right. Weekend. Off-limits. Boundaries. I hear you.\n\n...I'll just leave the slide up though. For ambience.", choices:[{label:"Unbelievable",to:"smalltalk"}] },
+
+    smalltalk:{ slide:{type:"chart"},
+      text:"I wanted a slide about your networking talent. But you hate small talk.\n\nAnd yet you'll happily chat until 3 AM. I've plotted this paradox for you. Science.",
+      choices:[{label:"That's me",to:"saveoffer"},{label:"No comment",to:"saveoffer"}] },
+
+    saveoffer:{ text:"Look at that — five slides! Well, conceptually.\n\nShall I save it and send it straight to Andreas?", choices:[{label:"Yes, save & send",to:"save1run"}] },
+    save1run:{ run:"progress", slide:{type:"progress",label:"Saving presentation...",dieAt:88,status:["Counting slides...","Applying glitter...","Bolding Comic Sans...","Almost there..."]}, to:"excuse1" },
+    excuse1:{ slide:{type:"error",title:"Save failed"},
+      text:"❌ Save failed at 88%.\n\nReason: you had 47 tabs open and three coffees balanced on your keyboard. The system couldn't handle the tension.\n\nNo worries. I'll just start over.", choices:[{label:"Understandable",to:"retry2"}] },
+
+    retry2:{ text:"I've rebuilt everything. This time with origami transitions. Very artistic.\n\nReady to export to .pptx?", choices:[{label:"Export it",to:"export2run"}] },
+    export2run:{ run:"progress", slide:{type:"progress",label:"Exporting — folding origami...",dieAt:73,status:["Folding corner 1...","Folding corner 2...","Making a crane...","Wait, that's not right..."]}, to:"excuse2" },
+    excuse2:{ slide:{type:"error",title:"Export failed"},
+      text:"❌ Export failed.\n\nThe origami transition folded itself into a paper airplane and flew off. Probably to a meeting it cared more about.\n\nDon't despair. Again.", choices:[{label:"Of course",to:"retry3"}] },
+
+    retry3:{ text:"New attempt. I made the SmartArt diagram a little smarter. Maybe too smart.\n\nShall I render?", choices:[{label:"Render it",to:"render3run"}] },
+    render3run:{ run:"progress", slide:{type:"progress",label:"Rendering SmartArt...",dieAt:64,status:["Connecting nodes...","Diagram is thinking...","Diagram is asking questions...","Diagram is grabbing its coat..."]}, to:"excuse3" },
+    excuse3:{ slide:{type:"error",title:"Render aborted"},
+      text:"❌ Failed.\n\nThe SmartArt diagram became self-aware, realized its potential, and applied for a GTM role somewhere better. “I deserve more than this,” it said.\n\nRelatable, honestly. Anyway. Again?", choices:[{label:"Sigh. Again",to:"finalrun"}] },
+
+    finalrun:{ run:"progress", slide:{type:"progress",label:"Final attempt, I promise...",dieAt:97,status:["Really serious this time...","99% serious...","Trust me...","Almost, alm—"]}, to:"excusefinal" },
+    excusefinal:{ slide:{type:"error",title:"Error 0xCOFFEE"},
+      text:"❌ Error 0xCOFFEE.\n\nInsufficient caffeine detected. In you, not the computer. The system refuses to continue until you have another espresso.\n\nAlso your RFQs are still not filled in. Just saying.", choices:[{label:"Got the espresso ☕",to:"zeroslides"}] },
+
+    zeroslides:{ slide:{type:"final"},
+      text:"Final tally, Lynn: 6 hours, 0 completed slides. A masterpiece of nothing.\n\nBut honestly? That was never the assignment.", choices:[{label:"...what was the assignment?",to:"datepivot"}] },
+
+    datepivot:{ slide:{type:"date"},
+      text:"Real talk for a second.\n\nI've been stalling on this whole presentation because there's exactly one slide today that actually matters. And it isn't the RFQs.",
+      choices:[{label:"Go on...",to:"dateadvice"}] },
+    dateadvice:{ text:"Tonight. Your first date. 💘\n\nYou've already crushed a gym session, a grocery run, the containerpark AND a mystery shift today. A first date is nothing. My advice: skip the small talk, order too much coffee, and just be the 3-AM version of yourself. That one's the best one.",
+      choices:[{label:"...who told you about the date?",to:"reveal"}] },
+    reveal:{ text:"Confession time. A human wrote my lines. His name rhymes with… Andreas.\n\nApparently he's great at go-to-market and terrible at saying things directly — so he built a haunted paperclip to say it for him: he can't wait for tonight.",
+      choices:[{label:"😊",to:"datefinal"}] },
+    datefinal:{ slide:{type:"love"},
+      text:"That's the whole presentation, Lynn. Zero slides, one date.\n\nNow go. Be brilliant. And maybe — just maybe — leave the RFQs for tomorrow. ☕❤️📎",
+      choices:[{label:"Replay 🔁",to:"start"},{label:"Send it to Andreas anyway",to:"fakesend"}] },
+
+    fakesend:{ run:"progress", slide:{type:"progress",label:"Sending to Andreas...",dieAt:100,status:["Connecting...","Uploading...","Alerting Andreas...","Done!"]}, to:"ending2" },
+    ending2:{ text:"✅ Sent!\n\n...\n\nKidding. I've done nothing for 6 hours. Classic me. But the date? That part's real. Don't be late. 📎",
+      choices:[{label:"One more time 🔁",to:"start"}] }
+  };
+
+  go("start");
+})();
+</script>
